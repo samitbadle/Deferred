@@ -1,4 +1,23 @@
-//Loosely modeled on jQuery's Deferred and
+/*
+ * Copyright 2012 Samit Badle
+ * http://blog.reallysimplethoughts.com/tag/deferred/
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Deferred - a class for easing asynchronous programming pain.
+ * Loosely modeled on jQuery's Deferred and Promises/A specification
+ */
 function Deferred(ctor) {
   var that = this, state = Deferred.PENDING, done = [], fail = [], argsValue = null;
 
@@ -73,20 +92,21 @@ function Deferred(ctor) {
   };
 
   /**
-   * Use pipe to either chain deferred together or to filter/map the results
+   * Use pipe to either chain two deferred objects together or to filter/map the results.
    * The working is simple. Calling pipe will create a new deferred (master). One of the callbacks will be called
    * when the top deferred is resolved or rejected along with the received arguments. If the return value of the
-   * callback is a deferred, this chained deferred would determine the state and return of the master deferred.
+   * callback is a deferred, this chained deferred would determine the state and value of the master deferred.
    * If the return of the callback is not a deferred the results would simply be treated as filtered/mapped results.
    * If using for filtering / mapping the return value of the function can either be an array containing filtered results
    * for each arguments or a single non array value.
-   * If you simply want to return the arguments, convert it to an array first using
-   * Array.prototype.slice.call(arguments)
+   * If you simply want to return the arguments sent to the callback function, convert it to an array first using
+   * return Array.prototype.slice.call(arguments);
    * @param doneCallback
    * @param failCallback
    * @return {Deferred} a new Deferred which will chain or filter the result using the appropriate callback
    */
   this.pipe = function (doneCallback, failCallback) {
+    //TODO perhaps it is better (less confusing) to introduce two new methods chain and filter?
     return new Deferred(function (master) {
       if (doneCallback) {
         that.done(function () {
